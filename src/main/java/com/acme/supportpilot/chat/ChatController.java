@@ -1,6 +1,7 @@
 package com.acme.supportpilot.chat;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +24,21 @@ public class ChatController {
                 .user(q)
                 .call()
                 .content();
+    }
+
+    /** Checkpoint C: same call, but keep the whole ChatResponse to read tokens and model. */
+    @GetMapping("/meta")
+    public ChatReply chatWithMetadata(@RequestParam String q) {
+        long start = System.nanoTime();
+        ChatResponse response = chat.prompt()
+                .user(q)
+                .call()
+                .chatResponse();
+        long latencyMs = (System.nanoTime() - start) / 1_000_000;
+        if (response == null) {
+            throw new IllegalStateException("The model returned no response");
+        }
+        return ChatReply.from(response, latencyMs);
     }
 
 }
