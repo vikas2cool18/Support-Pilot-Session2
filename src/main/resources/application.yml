@@ -1,9 +1,78 @@
+# =====================================================================
+# SupportPilot - Session 1
+# Profiles:   (default) -> OpenAI        local -> Ollama        anthropic -> Claude
+# Run:        mvn spring-boot:run -Dspring-boot.run.profiles=local
+# Never put API keys in this file - they come from environment variables.
+# =====================================================================
 spring:
   application:
     name: supportpilot
+  ai:
+    model:
+      chat: openai            # which ChatModel is active: openai | anthropic | ollama
+      # Session 1 only needs chat. Switch the other model types off so that
+      # providers you are not using do not ask for API keys at startup.
+      embedding: none
+      image: none
+      audio:
+        transcription: none
+        speech: none
+      moderation: none
+    openai:
+      api-key: ${OPENAI_API_KEY:}
+      chat:
+        model: ${OPENAI_CHAT_MODEL:gpt-4.1-mini}
+    anthropic:
+      api-key: ${ANTHROPIC_API_KEY:}
+      chat:
+        model: ${ANTHROPIC_CHAT_MODEL:claude-haiku-4-5}
+    ollama:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      chat:
+        model: ${OLLAMA_CHAT_MODEL:llama3.2}
+      init:
+        pull-model-strategy: when_missing   # downloads the model on first start if needed
 
 management:
   endpoints:
     web:
       exposure:
         include: health,info
+
+logging:
+  level:
+    # DEBUG shows every prompt and response logged by SimpleLoggerAdvisor.
+    # Great for learning - turn it off in production (prompts can contain personal data).
+    org.springframework.ai.chat.client.advisor: DEBUG
+
+supportpilot:
+  homework:
+    questions: homework/questions.txt
+    results-dir: results
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  ai:
+    model:
+      chat: ollama
+
+---
+spring:
+  config:
+    activate:
+      on-profile: anthropic
+  ai:
+    model:
+      chat: anthropic
+
+---
+# Homework runner: combine with a provider profile, e.g. --spring.profiles.active=local,compare
+spring:
+  config:
+    activate:
+      on-profile: compare
+  main:
+    web-application-type: none
