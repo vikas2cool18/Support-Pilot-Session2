@@ -1,0 +1,23 @@
+### Session 1 requests - run from IntelliJ IDEA / VS Code REST Client, or copy the curl lines from the README.
+
+### Checkpoint B - simple chat
+GET http://localhost:8080/chat?q=How do I reset my password?
+
+### Checkpoint C - answer + tokens + latency
+GET http://localhost:8080/chat/meta?q=Explain our SLA tiers in two sentences
+
+### Checkpoint D - streaming (Server-Sent Events)
+GET http://localhost:8080/chat/stream?q=Write a short welcome message for a new customer
+Accept: text/event-stream
+
+### Checkpoint E - which model is active?
+GET http://localhost:8080/models
+
+### Stretch - temperature 0.0 vs 1.0
+GET http://localhost:8080/chat/temperature?q=Suggest a name for our support bot&t=0.0&runs=5
+
+###
+GET http://localhost:8080/chat/temperature?q=Suggest a name for our support bot&t=1.0&runs=5
+
+### Health
+GET http://localhost:8080/actuator/health

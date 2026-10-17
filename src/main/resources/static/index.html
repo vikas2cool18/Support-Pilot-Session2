@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SupportPilot · Session 1</title>
+<style>
+  :root { --ink:#1f2937; --muted:#6b7280; --line:#e5e7eb; --brand:#0f766e; --bg:#f8fafc; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color:var(--ink); background:var(--bg); }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px; }
+  h1 { margin:0 0 4px; font-size: 26px; }
+  .sub { color:var(--muted); margin:0 0 24px; }
+  textarea { width:100%; min-height:80px; padding:12px; font:inherit; border:1px solid var(--line); border-radius:8px; resize:vertical; }
+  .row { display:flex; gap:8px; margin:12px 0 20px; flex-wrap:wrap; }
+  button { padding:10px 16px; border:0; border-radius:8px; font:inherit; cursor:pointer; background:var(--brand); color:#fff; }
+  button.secondary { background:#fff; color:var(--brand); border:1px solid var(--brand); }
+  button:disabled { opacity:.5; cursor:wait; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:16px; min-height:120px; white-space:pre-wrap; line-height:1.5; }
+  .stats { display:flex; gap:16px; flex-wrap:wrap; color:var(--muted); font-size:14px; margin-top:10px; }
+  .stats b { color:var(--ink); }
+  .model { font-size:14px; color:var(--muted); margin-bottom:16px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>SupportPilot</h1>
+  <p class="sub">Session 1 · Portable, streaming chat with Spring AI</p>
+  <div class="model" id="model">Active model: loading…</div>
+
+  <textarea id="q">How do I reset my password?</textarea>
+  <div class="row">
+    <button id="stream">Stream answer</button>
+    <button id="meta" class="secondary">Ask (with tokens &amp; latency)</button>
+  </div>
+
+  <div class="card" id="answer">The answer appears here.</div>
+  <div class="stats" id="stats"></div>
+</main>
+
+<script>
+  const $ = id => document.getElementById(id);
+  const answer = $('answer'), stats = $('stats');
+
+  fetch('/models').then(r => r.json())
+    .then(m => $('model').textContent = `Active model: ${m.provider} · ${m.model}`)
+    .catch(() => $('model').textContent = 'Active model: /models not available yet (Checkpoint E)');
+
+  function busy(on) { $('stream').disabled = on; $('meta').disabled = on; }
+
+  // Checkpoint D: Server-Sent Events. Each event is JSON like {"text":" world"}.
+  $('stream').onclick = () => {
+    const q = $('q').value.trim(); if (!q) return;
+    answer.textContent = ''; stats.textContent = ''; busy(true);
+    const started = performance.now(); let first = null, chunks = 0;
+    const source = new EventSource('/chat/stream?q=' + encodeURIComponent(q));
+    source.onmessage = e => {
+      if (first === null) first = performance.now() - started;
+      chunks++; answer.textContent += JSON.parse(e.data).text;
+    };
+    source.onerror = () => {           // fires when the server closes the stream
+      source.close(); busy(false);
+      if (chunks === 0) { answer.textContent = 'Streaming failed - check the application log.'; return; }
+      stats.innerHTML = `<span>Time to first token: <b>${Math.round(first)} ms</b></span>` +
+                        `<span>Total: <b>${Math.round(performance.now() - started)} ms</b></span>` +
+                        `<span>Chunks: <b>${chunks}</b></span>`;
+    };
+  };
+
+  // Checkpoint C: blocking call that returns the answer plus metadata.
+  $('meta').onclick = async () => {
+    const q = $('q').value.trim(); if (!q) return;
+    answer.textContent = 'Thinking…'; stats.textContent = ''; busy(true);
+    try {
+      const res = await fetch('/chat/meta?q=' + encodeURIComponent(q));
+      const body = await res.json();
+      if (!res.ok) { answer.textContent = `${body.title}: ${body.detail}`; return; }
+      answer.textContent = body.answer;
+      stats.innerHTML = `<span>Model: <b>${body.model}</b></span>` +
+                        `<span>Prompt tokens: <b>${body.promptTokens}</b></span>` +
+                        `<span>Completion tokens: <b>${body.completionTokens}</b></span>` +
+                        `<span>Latency: <b>${body.latencyMs} ms</b></span>`;
+    } catch (err) {
+      answer.textContent = 'Request failed: ' + err;
+    } finally { busy(false); }
+  };
+</script>
+</body>
+</html>

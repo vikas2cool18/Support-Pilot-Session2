@@ -1,0 +1,12 @@
+# Session 1 homework - 10 support questions for Acme Cloud.
+# Lines starting with # are ignored. Run each model with the 'compare' profile.
+How do I reset my password?
+I was charged twice this month. What should I do?
+Can I export all my invoices as a single PDF?
+My dashboard shows "Error 503 - service unavailable". What does that mean?
+How do I add a new team member and give them read-only access?
+What is the difference between the PRO and ENTERPRISE plans?
+Write a polite reply to a customer who is angry that their data import failed.
+Is my data stored in India? Our company needs data residency.
+Summarise in one sentence: "The sync job failed at 02:00 because the API token expired; renewing the token fixed it."
+Translate to Hindi: "Your refund has been processed and will reach your account in 5 to 7 working days."
