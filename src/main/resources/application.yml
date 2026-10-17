@@ -33,6 +33,17 @@ spring:
         model: ${OLLAMA_CHAT_MODEL:llama3.2}
       init:
         pull-model-strategy: when_missing   # downloads the model on first start if needed
+    chat:
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: always       # creates the SPRING_AI_CHAT_MEMORY table on start
+
+  # Session 2, Checkpoint D: PostgreSQL for chat memory (docker compose up -d)
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/supportpilot}
+    username: ${DB_USER:supportpilot}
+    password: ${DB_PASSWORD:supportpilot}
 
 management:
   endpoints:
@@ -54,6 +65,9 @@ supportpilot:
   triage:
     prompt-version: v1
     native-structured-output: true   # send the JSON schema to the provider as an API constraint
+  # Session 2, Checkpoint D: how many messages of history are sent back to the model
+  memory:
+    max-messages: 20
 
 ---
 spring:
