@@ -68,6 +68,9 @@ supportpilot:
   # Session 2, Checkpoint D: how many messages of history are sent back to the model
   memory:
     max-messages: 20
+  # Session 2, Checkpoint E: labelled tickets for the accuracy runner
+  accuracy:
+    dataset: data/tickets-labelled.csv
 
 ---
 spring:
@@ -96,3 +99,11 @@ spring:
   main:
     web-application-type: none
 
+---
+# Session 2 triage accuracy runner: combine with a provider profile, e.g. --spring.profiles.active=local,accuracy
+spring:
+  config:
+    activate:
+      on-profile: accuracy
+  main:
+    web-application-type: none
