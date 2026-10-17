@@ -1,7 +1,10 @@
 package com.acme.supportpilot.chat;
 
+import reactor.core.publisher.Flux;
+
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,6 +42,16 @@ public class ChatController {
             throw new IllegalStateException("The model returned no response");
         }
         return ChatReply.from(response, latencyMs);
+    }
+
+    /** Checkpoint D: stream tokens to the client as Server-Sent Events. */
+    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<Token> stream(@RequestParam String q) {
+        return chat.prompt()
+                .user(q)
+                .stream()
+                .content()
+                .map(Token::new);
     }
 
 }
