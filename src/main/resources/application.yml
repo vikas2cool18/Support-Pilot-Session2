@@ -1,8 +1,9 @@
 # =====================================================================
-# SupportPilot - Session 1
+# SupportPilot - Sessions 1-2
 # Profiles:   (default) -> OpenAI        local -> Ollama        anthropic -> Claude
 # Run:        mvn spring-boot:run -Dspring-boot.run.profiles=local
 # Never put API keys in this file - they come from environment variables.
+# Session 2 needs PostgreSQL:  docker compose up -d
 # =====================================================================
 spring:
   application:
@@ -49,6 +50,10 @@ supportpilot:
   homework:
     questions: homework/questions.txt
     results-dir: results
+  # Session 2, Checkpoint A: which prompt file to use (prompts/triage-system-<version>.st)
+  triage:
+    prompt-version: v1
+    native-structured-output: true   # send the JSON schema to the provider as an API constraint
 
 ---
 spring:
@@ -76,3 +81,4 @@ spring:
       on-profile: compare
   main:
     web-application-type: none
+
