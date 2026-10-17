@@ -26,6 +26,11 @@ public class ApiExceptionHandler {
                 "Missing query parameter '" + ex.getParameterName() + "'. Example: /chat?q=How do I reset my password?");
     }
 
+    @ExceptionHandler(InvalidRequestException.class)
+    public ProblemDetail invalidRequest(InvalidRequestException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ProblemDetail modelFailure(RuntimeException ex) {
         log.error("Model call failed", ex);
