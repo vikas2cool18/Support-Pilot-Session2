@@ -13,9 +13,9 @@
 
     <groupId>com.acme</groupId>
     <artifactId>supportpilot</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <name>SupportPilot</name>
-    <description>AI Engineering for Java Developers - Session 1: portable, streaming chat with Spring AI</description>
+    <description>AI Engineering for Java Developers - Sessions 1-2: chat, structured triage and memory with Spring AI</description>
 
     <properties>
         <java.version>21</java.version>

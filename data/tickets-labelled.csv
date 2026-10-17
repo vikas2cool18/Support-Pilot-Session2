@@ -1,0 +1,21 @@
+id,ticket,category,priority,sentiment,team
+T01,"I was charged twice for my March invoice (INV-20931). Please refund the duplicate payment.",BILLING,P2,NEGATIVE,BILLING_OPS
+T02,"How do I export my contacts to a CSV file?",TECHNICAL,P3,NEUTRAL,L1_SUPPORT
+T03,"Our whole team cannot log in since 9 AM. The dashboard shows Error 503. We are completely blocked!",TECHNICAL,P1,NEGATIVE,L2_ENGINEERING
+T04,"It would be great if the mobile app supported dark mode.",FEATURE_REQUEST,P4,POSITIVE,PRODUCT
+T05,"I received a password reset email that I did not request. Is someone trying to access my account?",ACCOUNT,P2,NEGATIVE,ACCOUNT_SECURITY
+T06,"Please change the billing email on our account to accounts@sharma-traders.in",BILLING,P3,NEUTRAL,BILLING_OPS
+T07,"The invoice PDF download button does nothing in Firefox. Works in Chrome.",TECHNICAL,P3,NEUTRAL,L2_ENGINEERING
+T08,"Thank you for the quick fix yesterday, everything works perfectly now!",OTHER,P4,POSITIVE,L1_SUPPORT
+T09,"We need to add 15 new users to our ENTERPRISE plan before Monday. What is the process?",ACCOUNT,P3,NEUTRAL,L1_SUPPORT
+T10,"All customer records imported yesterday have disappeared. This is critical, we may have lost data.",TECHNICAL,P1,NEGATIVE,L2_ENGINEERING
+T11,"Mera payment fail ho gaya but paisa account se kat gaya. Please check urgently.",BILLING,P2,NEGATIVE,BILLING_OPS
+T12,"Can you add an integration with Tally for our accounting?",FEATURE_REQUEST,P4,NEUTRAL,PRODUCT
+T13,"I want to close my account and delete all my data.",ACCOUNT,P3,NEUTRAL,ACCOUNT_SECURITY
+T14,"Reports are taking more than 2 minutes to load since the last update. Very frustrating.",TECHNICAL,P2,NEGATIVE,L2_ENGINEERING
+T15,"Do you offer a discount for NGOs?",BILLING,P4,NEUTRAL,BILLING_OPS
+T16,"Two-factor authentication codes are not arriving on my phone, so I am locked out.",ACCOUNT,P2,NEGATIVE,ACCOUNT_SECURITY
+T17,"What are your support hours during Diwali?",OTHER,P4,NEUTRAL,L1_SUPPORT
+T18,"The API returns 500 errors for every request to /v2/orders since this morning. Our checkout is down.",TECHNICAL,P1,NEGATIVE,L2_ENGINEERING
+T19,"Is it possible to schedule reports to be emailed every Monday? That would save us a lot of time.",FEATURE_REQUEST,P4,POSITIVE,PRODUCT
+T20,"Our GST number is wrong on the last three invoices. We need corrected invoices for filing.",BILLING,P2,NEGATIVE,BILLING_OPS

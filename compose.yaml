@@ -1,14 +1,26 @@
-# Optional: run Ollama in Docker instead of installing it natively.
-#   docker compose up -d
-#   docker compose exec ollama ollama pull llama3.2
-# Native Ollama is usually faster on laptops (it can use the Apple/NVIDIA GPU directly).
+# Infrastructure for the bootcamp.
+#   docker compose up -d                    -> PostgreSQL (needed from Session 2)
+#   docker compose --profile ollama up -d   -> also Ollama in Docker (optional; native Ollama is usually faster)
 services:
+  postgres:
+    image: pgvector/pgvector:pg17            # PostgreSQL 17 with pgvector, ready for Session 3
+    environment:
+      POSTGRES_DB: supportpilot
+      POSTGRES_USER: supportpilot
+      POSTGRES_PASSWORD: supportpilot
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
   ollama:
     image: ollama/ollama:latest
+    profiles: ["ollama"]
     ports:
       - "11434:11434"
     volumes:
       - ollama-models:/root/.ollama
 
 volumes:
+  postgres-data:
   ollama-models:
