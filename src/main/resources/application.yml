@@ -63,7 +63,7 @@ supportpilot:
     results-dir: results
   # Session 2, Checkpoint A: which prompt file to use (prompts/triage-system-<version>.st)
   triage:
-    prompt-version: v1
+    prompt-version: v2
     native-structured-output: true   # send the JSON schema to the provider as an API constraint
   # Session 2, Checkpoint D: how many messages of history are sent back to the model
   memory:
